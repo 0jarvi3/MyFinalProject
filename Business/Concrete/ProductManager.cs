@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -14,23 +16,43 @@ public class ProductManager : IProductService
         _productDal = productDal;
     }
 
-    public List<Product>? GetAll()
+    public IDataResult<List<Product>?> GetAll()
     {
-        return _productDal.GetAll();
+        var result = _productDal.GetAll();
+        return new SuccessDataResult<List<Product>?>(result);
     }
 
-    public List<Product>? GetAllByCategoryId(int categoryId)
+    public IDataResult<List<Product>?> GetAllByCategoryId(int categoryId)
     {
-        return _productDal.GetAll(p => p.CategoryId == categoryId);
+        var result = _productDal.GetAll(p => p.CategoryId == categoryId);
+        return new SuccessDataResult<List<Product>?>(result);
     }
 
-    public List<Product>? GetByUnitPrice(decimal min, decimal max)
+    public IDataResult<List<Product>?> GetByUnitPrice(decimal min, decimal max)
     {
-        return _productDal.GetAll(p => p.UnitPrice <= max && p.UnitPrice >= min);
+        var result = _productDal.GetAll(p => p.UnitPrice <= max && p.UnitPrice >= min);
+        return new SuccessDataResult<List<Product>?>(result);
     }
 
-    public List<ProductDetailDto> GetProductDetails()
+    public IDataResult<List<ProductDetailDto>> GetProductDetails()
     {
-        return _productDal.GetProductDetails();
+        var result = _productDal.GetProductDetails();
+        return new SuccessDataResult<List<ProductDetailDto>>(result);
+    }
+
+    public IResult Add(Product product)
+    {
+        if (product.ProductName.Length < 2)
+        {
+            return new ErrorResult(Messages.ProductNameInvalid);
+        }
+
+        _productDal.Add(product);
+        return new Result(true, Messages.ProductAdded);
+    }
+
+    public Product GetById(int productId)
+    {
+        return _productDal.Get(p => p.ProductId == productId);
     }
 }

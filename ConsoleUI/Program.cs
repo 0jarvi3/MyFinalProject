@@ -19,11 +19,6 @@ namespace ConsoleUI
             //    Console.WriteLine(product.ProductName);
             //}
 
-            foreach (var productDetailDto in productManager.GetProductDetails())
-            {
-                Console.WriteLine($"Name:{productDetailDto.ProductName} // Category:{productDetailDto.CategoryName}");
-            }
-
         }
     }
 }
