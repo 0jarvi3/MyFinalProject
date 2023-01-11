@@ -13,12 +13,12 @@ public class CategoryManager : ICategoryService
         _categoryDal = categoryDal;
     }
 
-    public List<Category>? GetAll()
+    public List<Category> GetAll()
     {
         return _categoryDal.GetAll();
     }
 
-    public Category? GetById(int categoryId)
+    public Category GetById(int categoryId)
     {
         return _categoryDal.Get(p => p.CategoryId == categoryId);
     }

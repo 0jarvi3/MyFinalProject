@@ -16,22 +16,27 @@ public class ProductManager : IProductService
         _productDal = productDal;
     }
 
-    public IDataResult<List<Product>?> GetAll()
+    public IDataResult<List<Product>> GetAll()
     {
+        if (DateTime.Now.Hour == 12)
+        {
+            return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
+        }
+
         var result = _productDal.GetAll();
-        return new SuccessDataResult<List<Product>?>(result);
+        return new SuccessDataResult<List<Product>>(result,Messages.ProductListed);
     }
 
-    public IDataResult<List<Product>?> GetAllByCategoryId(int categoryId)
+    public IDataResult<List<Product>> GetAllByCategoryId(int categoryId)
     {
         var result = _productDal.GetAll(p => p.CategoryId == categoryId);
-        return new SuccessDataResult<List<Product>?>(result);
+        return new SuccessDataResult<List<Product>>(result);
     }
 
-    public IDataResult<List<Product>?> GetByUnitPrice(decimal min, decimal max)
+    public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
     {
         var result = _productDal.GetAll(p => p.UnitPrice <= max && p.UnitPrice >= min);
-        return new SuccessDataResult<List<Product>?>(result);
+        return new SuccessDataResult<List<Product>>(result);
     }
 
     public IDataResult<List<ProductDetailDto>> GetProductDetails()
@@ -51,8 +56,9 @@ public class ProductManager : IProductService
         return new Result(true, Messages.ProductAdded);
     }
 
-    public Product GetById(int productId)
+    public IDataResult<Product> GetById(int productId)
     {
-        return _productDal.Get(p => p.ProductId == productId);
+        var result = _productDal.Get(p => p.ProductId == productId);
+        return new SuccessDataResult<Product>(result);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Business.Concrete;
+using Core.Utilities.Results;
 using DataAccess.Concrete;
+using Entities.Concrete;
 
 namespace ConsoleUI
 {
@@ -14,10 +16,19 @@ namespace ConsoleUI
             //}
 
             ProductManager productManager = new ProductManager(new ProductDal());
-            //foreach (var product in productManager.GetAll())
-            //{
-            //    Console.WriteLine(product.ProductName);
-            //}
+            var result = productManager.GetAll();
+            if (result.Success)
+            {
+                foreach (var product in productManager.GetAll().Data)
+                {
+                    Console.WriteLine(product.ProductName);
+                }
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
+ 
 
         }
     }
