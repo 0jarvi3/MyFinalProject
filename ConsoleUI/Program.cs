@@ -1,10 +1,29 @@
-﻿namespace ConsoleUI
+﻿using Business.Concrete;
+using DataAccess.Concrete;
+
+namespace ConsoleUI
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            //CategoryManager categoryManager = new CategoryManager(new CategoryDal());
+            //foreach (var category in categoryManager.GetAll())
+            //{
+            //    Console.WriteLine(category.CategoryName);
+            //}
+
+            ProductManager productManager = new ProductManager(new ProductDal());
+            //foreach (var product in productManager.GetAll())
+            //{
+            //    Console.WriteLine(product.ProductName);
+            //}
+
+            foreach (var productDetailDto in productManager.GetProductDetails())
+            {
+                Console.WriteLine($"Name:{productDetailDto.ProductName} // Category:{productDetailDto.CategoryName}");
+            }
+
         }
     }
 }
